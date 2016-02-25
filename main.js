@@ -1,5 +1,5 @@
 // add require dependencies
-// const cssHighlight = require('./controllers/cssHighlight.js');
+const cssHighlight = require('./controllers/cssHighlight.js');
 const gui = require('./controllers/gui.js')
 
 const $ = require('jquery');
@@ -36,6 +36,15 @@ $(document).ready(function() {
 
             let results = [];
             let tempTarget = e.target
+            console.log(tempTarget);
+            results[0] = tempTarget;
+            // var parents =$(e.target).parentsUntil('body');
+            // var parentsCopy = parents.slice(0,parents.length - 1);
+            // var thisElement = $('#api-window').contents().find(parents)[0];
+            // console.log(parentsCopy);
+            // // $('#api-window').contents().find(parents).css('background-color', 'green');
+            // parents.css('background-color', 'green')
+            // // $('#api-window').contents().find($('#api-window').contents().find(parents)[0]).css('background-color', 'blue');
 
             while (tempTarget) {
               results.push(tempTarget.parentNode);
@@ -54,8 +63,9 @@ $(document).ready(function() {
             for (let i = 0; i < e.target.attributes.length; i++) {
               attributes.push(e.target.attributes[i]);
             }
-            console.log("attributes:", attributes);
-            attributes.unshift({name: "text"})
+            // console.log("attributes:", attributes);
+            attributes.unshift({name: "text"});
+            cssHighlight(ancestryChain);
             gui.buildGUI(attributes);
 
             // when you click the add element button
@@ -64,14 +74,15 @@ $(document).ready(function() {
               let indivObj = {};
               let indivAttr = $('#guiDropDown').val();
                 indivObj.string = ancestryChain;
-                indivObj.name = $('#propName').val() || indivAttr;
+                indivObj.name = $('#propName').val();
                 indivObj.attr = indivAttr;
                 indivObj.text = e.target.textContent || "";
 
-              console.log("main array before: ", mainArray);
+              // console.log("main array before: ", mainArray);
               mainArray.push(indivObj);
 
-              console.log("mainArray after:", mainArray);
+              mainArray[0].first = true;
+              // console.log("mainArray after:", mainArray);
 
               indivObj = {};
               ancestryChain = "";

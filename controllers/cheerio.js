@@ -20,20 +20,30 @@ var cheerio = {
 			.then($ => {
 				const result = [];
 				// queries = JSON.parse(queries);
-				console.log(Array.isArray(queries));
-				queries.forEach(query => {
-					console.log("this is a query in cheerio:", query);
+				// console.log(Array.isArray(queries));
+				queries.forEach((query,i) => {
+					console.log("in forEach");
 					result[query.name] = [];
 					//add error handling for bad query.string
 					$(query.string).each((i, elem) => {
-						if (query.text) {
+						console.log('query string in .each:', elem);
+						if (query.first) {
+							console.log('query text exists')
 							var tmpObj = {};
 							tmpObj[query.name] = $(elem).text();
 							result.push(tmpObj);
 						} else {
-							tmpObj = {};
-							tmpObj[query.name] = $(elem).attr(query.attr);
-							result.push(tmpObj);
+							console.log('qt no no => to results array', result[i]);
+							// tmpObj = {};
+							// tmpObj[query.name] = $(elem).attr(query.attr);
+							// result.push(tmpObj);
+							if (result[i]){
+							result[i][query.name] = $(elem).text();
+						} else {
+								var tmpObj = {};
+								tmpObj[query.name] = $(elem).text();
+								result.push(tmpObj);
+						}
 						}
 					});
 				});
