@@ -19,11 +19,10 @@ var cheerio = {
 		const data = rp(options)
 			.then($ => {
 				const result = [];
-				// queries = JSON.parse(queries);
-				// console.log(Array.isArray(queries));
 				queries.forEach((query,i) => {
 					console.log("in forEach");
 					result[query.name] = [];
+					console.log('query string in foreach: ==>  ',query.string);
 					//add error handling for bad query.string
 					$(query.string).each((i, elem) => {
 						console.log('query string in .each:', elem);
@@ -34,16 +33,13 @@ var cheerio = {
 							result.push(tmpObj);
 						} else {
 							console.log('qt no no => to results array', result[i]);
-							// tmpObj = {};
-							// tmpObj[query.name] = $(elem).attr(query.attr);
-							// result.push(tmpObj);
 							if (result[i]){
 							result[i][query.name] = $(elem).text();
-						} else {
+							} else {
 								var tmpObj = {};
 								tmpObj[query.name] = $(elem).text();
 								result.push(tmpObj);
-						}
+							}
 						}
 					});
 				});

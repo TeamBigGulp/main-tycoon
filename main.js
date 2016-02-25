@@ -35,24 +35,20 @@ $(document).ready(function() {
             e.preventDefault();
 
             let results = [];
-            let tempTarget = e.target
-            console.log(tempTarget);
+            let tempTarget = e.target;
+            console.log('temptarget====>',tempTarget);
             results[0] = tempTarget;
-            // var parents =$(e.target).parentsUntil('body');
-            // var parentsCopy = parents.slice(0,parents.length - 1);
-            // var thisElement = $('#api-window').contents().find(parents)[0];
-            // console.log(parentsCopy);
-            // // $('#api-window').contents().find(parents).css('background-color', 'green');
-            // parents.css('background-color', 'green')
-            // // $('#api-window').contents().find($('#api-window').contents().find(parents)[0]).css('background-color', 'blue');
+            var parents =$(e.target).parentsUntil('body');
+            console.log(parents);
 
             while (tempTarget) {
               results.push(tempTarget.parentNode);
               tempTarget = tempTarget.parentNode;
             }
+            console.log("results:", results);
 
             let ancestryChain = "";
-            for (let i = (results.length - 4); i > 0; i--) {
+            for (let i = (results.length - 4); i >= 0; i--) {
               ancestryChain += results[i].nodeName + ' ';
             }
 
@@ -77,7 +73,8 @@ $(document).ready(function() {
                 indivObj.name = $('#propName').val();
                 indivObj.attr = indivAttr;
                 indivObj.text = e.target.textContent || "";
-
+                console.log($(results[0]).text());
+              $('#gui-bottom').append("<p><strong>" + indivObj.name + ":</strong>"+  $(results[0]).text() + "</p>");
               // console.log("main array before: ", mainArray);
               mainArray.push(indivObj);
 
@@ -87,14 +84,13 @@ $(document).ready(function() {
               indivObj = {};
               ancestryChain = "";
 
-              for (var i = 0; i < mainArray.length; i++) {
-                  $('#gui-bottom').append("<p><strong>" + mainArray[i].indivAttr + "</strong></p>");
-              }
+
+
+              console.log("mainArray before AJAX Post: ", mainArray);
             });
 
             $('#guiSelector').submit((e) => {
               e.preventDefault();
-              console.log("mainArray before AJAX Post: ", mainArray);
               $.ajax({
                 type: 'POST',
                 url: '/apisubmit',
