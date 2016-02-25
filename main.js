@@ -46,13 +46,16 @@ $(document).ready(function() {
               tempTarget = tempTarget.parentNode;
             }
             console.log("results:", results);
-
+            // console.log($(`${results[0]}`));
+            // console.log(results[0].className);
             let ancestryChain = "";
             for (let i = (results.length - 4); i >= 0; i--) {
-              if ($(results[i]).class()){
-                console.log(results[i].class);
-              }
+              // if (results[0].className === ""){
+              //   console.log(results[0].className);
+              //   ancestryChain += results[i].nodeName +'.'+ results[i].className + ' ';
+              // } else {
               ancestryChain += results[i].nodeName + ' ';
+            // }
             }
 
             ancestryChain = ancestryChain.toLowerCase();
