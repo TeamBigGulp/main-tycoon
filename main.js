@@ -49,6 +49,9 @@ $(document).ready(function() {
 
             let ancestryChain = "";
             for (let i = (results.length - 4); i >= 0; i--) {
+              if ($(results[i]).class()){
+                console.log(results[i].class);
+              }
               ancestryChain += results[i].nodeName + ' ';
             }
 
