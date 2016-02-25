@@ -1,5 +1,5 @@
 // add require dependencies
-// const cssHighlight = require('./controllers/cssHighlight.js');
+const cssHighlight = require('./controllers/cssHighlight.js');
 const gui = require('./controllers/gui.js')
 
 const $ = require('jquery');
@@ -35,16 +35,27 @@ $(document).ready(function() {
             e.preventDefault();
 
             let results = [];
-            let tempTarget = e.target
+            let tempTarget = e.target;
+            console.log('temptarget====>',tempTarget);
+            results[0] = tempTarget;
+            var parents =$(e.target).parentsUntil('body');
+            console.log(parents);
 
             while (tempTarget) {
               results.push(tempTarget.parentNode);
               tempTarget = tempTarget.parentNode;
             }
-
+            console.log("results:", results);
+            // console.log($(`${results[0]}`));
+            // console.log(results[0].className);
             let ancestryChain = "";
-            for (let i = (results.length - 4); i > 0; i--) {
+            for (let i = (results.length - 4); i >= 0; i--) {
+              // if (results[0].className === ""){
+              //   console.log(results[0].className);
+              //   ancestryChain += results[i].nodeName +'.'+ results[i].className + ' ';
+              // } else {
               ancestryChain += results[i].nodeName + ' ';
+            // }
             }
 
             ancestryChain = ancestryChain.toLowerCase();
@@ -54,8 +65,9 @@ $(document).ready(function() {
             for (let i = 0; i < e.target.attributes.length; i++) {
               attributes.push(e.target.attributes[i]);
             }
-            console.log("attributes:", attributes);
-            attributes.unshift({name: "text"})
+            // console.log("attributes:", attributes);
+            attributes.unshift({name: "text"});
+            cssHighlight(ancestryChain);
             gui.buildGUI(attributes);
 
             // when you click the add element button
@@ -64,26 +76,27 @@ $(document).ready(function() {
               let indivObj = {};
               let indivAttr = $('#guiDropDown').val();
                 indivObj.string = ancestryChain;
-                indivObj.name = $('#propName').val() || indivAttr;
+                indivObj.name = $('#propName').val();
                 indivObj.attr = indivAttr;
                 indivObj.text = e.target.textContent || "";
-
-              console.log("main array before: ", mainArray);
+                console.log($(results[0]).text());
+              $('#gui-bottom').append("<p><strong>" + indivObj.name + ":</strong>"+  $(results[0]).text() + "</p>");
+              // console.log("main array before: ", mainArray);
               mainArray.push(indivObj);
 
-              console.log("mainArray after:", mainArray);
+              mainArray[0].first = true;
+              // console.log("mainArray after:", mainArray);
 
               indivObj = {};
               ancestryChain = "";
 
-              for (var i = 0; i < mainArray.length; i++) {
-                  $('#gui-bottom').append("<p><strong>" + mainArray[i].indivAttr + "</strong></p>");
-              }
+
+
+              console.log("mainArray before AJAX Post: ", mainArray);
             });
 
             $('#guiSelector').submit((e) => {
               e.preventDefault();
-              console.log("mainArray before AJAX Post: ", mainArray);
               $.ajax({
                 type: 'POST',
                 url: '/apisubmit',
