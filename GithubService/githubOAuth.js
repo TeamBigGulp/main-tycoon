@@ -37,7 +37,7 @@ module.exports = {
     //access token can now be used to request information about the user
   },
   getUserInfo (req, res, next) {
-
+    //making request to github for user's github handle
     var url = 'https://api.github.com/'+ 'user?' + `access_token=${req.github}&` + 'user/emails';
     var options = {
       url: url,
@@ -54,7 +54,9 @@ module.exports = {
   },
 
   isLoggedIn (req, res, next) {
-      if (req.cookies.githubToken) next();
-      else res.redirect('/login');
+    // checks if github access token has a value - if not redirect
+    console.log('cookie', req.cookies.githubToken == undefined);
+    if (req.cookies.githubToken === undefined || req.cookies.githubToken === 'undefined') res.redirect('/login');
+    else next();
   }
 }
