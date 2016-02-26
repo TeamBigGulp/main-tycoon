@@ -55,7 +55,6 @@ module.exports = {
 
   isLoggedIn (req, res, next) {
     // checks if github access token has a value - if not redirect
-    console.log('cookie', req.cookies.githubToken == undefined);
     if (req.cookies.githubToken === undefined || req.cookies.githubToken === 'undefined') res.redirect('/login');
     else next();
   }

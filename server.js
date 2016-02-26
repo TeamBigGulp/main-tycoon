@@ -78,13 +78,13 @@ app.get('/goodbye.html', function(req, res) {
 });
 
 app.post('/apisubmit', function(req, res) {
+
   var url = req.cookies.website;
   var id = new ObjectID(req.cookies.apitycID);
   var queries = req.body;
 
   MongoClient(function(err, db) {
     db.collection('apiCollection').updateOne({_id: id}, { $set: { url: url, queries: queries}}, function(err, result) {
-      //console.log('updated result', result);
       db.close();
     });
   });
@@ -95,11 +95,9 @@ app.post('/apisubmit', function(req, res) {
 });
 
 app.get('/api/:id', function(req, res) {
-
   console.log("this is the params:", req.params.id);
   var id = new ObjectID(req.params.id);
-  // console.log('grabbed', id);
-  //get data from mongodb
+
 
   MongoClient(function(err, db) {
     db.collection('apiCollection').findOne({_id: id}, function(err, result) {
@@ -110,7 +108,7 @@ app.get('/api/:id', function(req, res) {
       console.log("This is about to get passed into cheerio:", queries);
 
       cheerio.getData(url, queries).then(function(data) {
-        console.log("tracing data:", data);
+        // console.log("tracing data:", data);
         res.send(data);
       });
     });
