@@ -14,7 +14,7 @@ app.use(cookieParser());
 
 app.use(bodyParser.json());
 
-app.get('/', githubOAuth.isLoggedIn ,function(req, res) {
+app.get('/', githubOAuth.isLoggedIn, function(req, res) {
 	if (!req.cookies.apitycID || req.cookies.apitycID === 'null') {
 		MongoClient(function(err, db) {
 			db.collection('apiCollection').insert({}, function(err, doc) {
@@ -46,13 +46,13 @@ app.get('/blank.html', function(req, res) {
 })
 
 app.post('/apireqpost/post.stf', function(req, res, next) {
+		console.log('reqbody', req.body.website);
     res.cookie('website', req.body.website);
     res.send();
 });
 
 
 app.get('/apireqget/get.stf', function(req, res, next) {
-
 	phantom.create().then(function(ph) {
 		ph.createPage().then(function(page) {
 			page.setting('userAgent', 'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_11_1) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/48.0.256');
@@ -72,21 +72,6 @@ app.get('/apireqget/*', function(req, res) {
 	res.redirect(req.cookies.website + '/' + req.originalUrl.slice(10));
 });
 
-app.get('/tycooned/:id', function(req, res) {
-	var id = new ObjectID(req.params.id);
-
-	MongoClient(function(err, db) {
-		db.collection('apiCollection').findOne({_id: id}, function(err, result) {
-			if (result) {
-				res.sendStatus(200);
-			} else {
-				res.sendStatus(404);
-			}
-
-			db.close();
-		});
-	});
-});
 
 app.get('/goodbye.html', function(req, res) {
 	res.sendFile(__dirname + '/goodbye.html');
@@ -103,7 +88,7 @@ app.post('/apisubmit', function(req, res) {
       db.close();
     });
   });
-
+	console.log(url);
   res.cookie('apitycID', 'null');
   res.send(id);
 
@@ -138,11 +123,9 @@ app.post('/githubOAuth', githubOAuth.redirectToGithub);
 
 app.get('/getAccessToken', githubOAuth.getAccessToken, githubOAuth.getUserInfo);
 
-app.get('*', function(req, res, next) {
-  console.log(req)
-  res.redirect(req.cookies.website + req.originalUrl);
-});
 
 
 
 app.listen(4000);
+
+module.exports = app;
